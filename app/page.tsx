@@ -80,7 +80,7 @@ export default async function Home() {
 
           {/* Grid โชว์รถ */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {motorcycles.map((bike) => (
+            {motorcycles.map((bike: any) => (
               <div key={bike.id} className="bg-white rounded-3xl shadow-lg hover:shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 border border-gray-100 flex flex-col">
                 <div className="relative h-56 bg-white flex items-center justify-center p-4">
                   {bike.imageUrl ? (
