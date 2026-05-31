@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  //url      = env("DATABASE_URL")
+}
+
+// Motorcycle Catalog
+model Motorcycle {
+  id           Int       @id @default(autoincrement())
+  brand        String    
+  modelName    String    
+  year         Int       
+  type         String    
+  price        Float     
+  minDown      Float     
+  imageUrl     String    
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  bookings     Booking[]
+}
+
+// Promotions
+model Promotion {
+  id          Int      @id @default(autoincrement())
+  title       String   
+  description String?  
+  bannerUrl   String   
+  isActive    Boolean  @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime @default(now())
+}
+
+// Bookings
+model Booking {
+  id           Int        @id @default(autoincrement())
+  customerName String     
+  phone        String     
+  lineId       String?    
+  motorcycleId Int
+  motorcycle   Motorcycle @relation(fields: [motorcycleId], references: [id])
+  status       String     @default("PENDING") 
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
