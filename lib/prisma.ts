@@ -2,16 +2,15 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 
 const prismaClientSingleton = () => {
-  // สร้าง Adapter สำหรับเชื่อมต่อ MySQL โดยระบุค่าให้ตรงกับใน Docker
+  // ใช้ MariaDB Adapter ซึ่งเป็นตัวมาตรฐานของ Prisma ในการต่อ MySQL
   const adapter = new PrismaMariaDb({
-    host: 'localhost',
+    host: '147.50.227.17',
     port: 3306,
-    user: 'root',
-    password: 'rootpassword',
-    database: 'rrmotor_db',
+    user: 'rrmotor_sinchai',
+    password: 'RrMotorDB2026',
+    database: 'rrmotor_test',
   });
   
-  // ส่ง Adapter เข้าไปใน PrismaClient ตามมาตรฐานเวอร์ชันล่าสุด
   return new PrismaClient({ adapter });
 };
 
