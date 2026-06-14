@@ -6,14 +6,16 @@ import PromoSlider from './components/PromoSlider';
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const currentDate = new Date();
+  // สร้างตัวแปรวันที่ปัจจุบัน และรีเซ็ตเวลาให้เป็น 00:00:00 จะได้เทียบเฉพาะวันที่
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0); // รีเซ็ตเวลาให้ตรงกับรูปแบบฐานข้อมูล
 
-  // 1. ดึงข้อมูลโปรโมชั่นที่เปิดใช้งาน และอยู่ในช่วงเวลาที่กำหนดเท่านั้น
+  // 1. ดึงข้อมูลโปรโมชั่นที่เปิดใช้งาน
   const promotions = await prisma.promotion.findMany({
     where: {
       isActive: true,
-      startDate: { lte: currentDate }, // วันเริ่มต้น ต้องน้อยกว่าหรือเท่ากับวันปัจจุบัน
-      endDate: { gte: currentDate },   // วันสิ้นสุด ต้องมากกว่าหรือเท่ากับวันปัจจุบัน
+      startDate: { lte: today }, 
+      endDate: { gte: today },   // คราวนี้ถึงจะเป็นวันนี้ ก็ยังผ่านเงื่อนไขครับ!
     },
     orderBy: { createdAt: "desc" },
   });
@@ -23,6 +25,8 @@ export default async function Home() {
     where: { isActive: true },
     orderBy: { createdAt: "desc" },
   });
+
+  // ... (โค้ดส่วนที่เหลือด้านล่างเหมือนเดิมทุกประการครับ)
 
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col">

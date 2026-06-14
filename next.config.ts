@@ -1,12 +1,14 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'www.rrmotorbikes.com', // อนุญาตให้ดึงรูปจากเว็บนี้ได้
-        pathname: '/**', // อนุญาตทุกโฟลเดอร์ย่อยในเว็บนี้
+        hostname: '**', // ใส่ ** เพื่ออนุญาตให้ดึงรูปจากเว็บไหนก็ได้ (สะดวกสุดครับ)
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
       },
     ],
   },
