@@ -1,27 +1,26 @@
 import Image from "next/image";
 import Link from "next/link"; 
 import prisma from "../lib/prisma";
+import PromoSlider from './components/PromoSlider'; 
+
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  // ดึงข้อมูลโปรโมชั่น
+  // 1. ดึงข้อมูลโปรโมชั่นทั้งหมดที่เปิดใช้งาน
   const promotions = await prisma.promotion.findMany({
     where: { isActive: true },
     orderBy: { createdAt: "desc" },
-    take: 1,
   });
 
-  // ดึงข้อมูลรถมอเตอร์ไซค์ทั้งหมดที่เปิดขาย
+  // 2. ดึงข้อมูลรถมอเตอร์ไซค์ทั้งหมดที่เปิดขาย
   const motorcycles = await prisma.motorcycle.findMany({
     where: { isActive: true },
     orderBy: { createdAt: "desc" },
   });
 
-  const mainPromo = promotions[0];
-
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
+      {/* Header (ส่วนหัวเว็บ) */}
       <header className="bg-white shadow-md py-4 px-8 flex justify-between items-center z-20 relative">
         <h1 className="text-3xl font-extrabold text-red-600 tracking-tighter">
           รุ่งเรืองยานยนต์
@@ -31,47 +30,10 @@ export default async function Home() {
         </button>
       </header>
 
-      {/* Hero Banner */}
-      <section className="relative w-full h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden bg-gray-900">
-        {mainPromo ? (
-          <>
-            {mainPromo.bannerUrl && (
-              <Image
-                src={mainPromo.bannerUrl}
-                alt={mainPromo.title}
-                fill
-                className="object-cover opacity-60"
-                priority
-              />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-            <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto flex flex-col items-center mt-10">
-              <span className="bg-red-600 text-white px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block shadow-lg">
-                🔥 โปรโมชั่นพิเศษเดือนนี้
-              </span>
-              <h2 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-                {mainPromo.title}
-              </h2>
-              {mainPromo.description && (
-                <p className="text-xl md:text-2xl mb-10 text-gray-200 drop-shadow-md">
-                  {mainPromo.description}
-                </p>
-              )}
-              <a 
-                href="#" 
-                className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-red-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 hover:bg-red-700 hover:scale-105 shadow-[0_0_20px_rgba(220,38,38,0.6)]"
-              >
-                ทักแชทสอบถามโปรโมชั่น
-                <svg className="w-6 h-6 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-              </a>
-            </div>
-          </>
-        ) : (
-          <div className="text-white text-2xl font-bold z-10">กำลังโหลดโปรโมชั่น...</div>
-        )}
-      </section>
+      {/* Hero Banner (ส่วนสไลด์โชว์โปรโมชั่นที่เราสร้างใหม่) */}
+      <PromoSlider promotions={promotions} />
 
-      {/* Motorcycle Catalog Section */}
+      {/* Motorcycle Catalog Section (ส่วนรายการรถมอเตอร์ไซค์ด้านล่าง) */}
       <section className="py-20 px-4 md:px-8 bg-gray-100 flex-1">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
