@@ -6,9 +6,15 @@ import PromoSlider from './components/PromoSlider';
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  // 1. ดึงข้อมูลโปรโมชั่นทั้งหมดที่เปิดใช้งาน
+  const currentDate = new Date();
+
+  // 1. ดึงข้อมูลโปรโมชั่นที่เปิดใช้งาน และอยู่ในช่วงเวลาที่กำหนดเท่านั้น
   const promotions = await prisma.promotion.findMany({
-    where: { isActive: true },
+    where: {
+      isActive: true,
+      startDate: { lte: currentDate }, // วันเริ่มต้น ต้องน้อยกว่าหรือเท่ากับวันปัจจุบัน
+      endDate: { gte: currentDate },   // วันสิ้นสุด ต้องมากกว่าหรือเท่ากับวันปัจจุบัน
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -20,7 +26,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header (ส่วนหัวเว็บ) */}
+      {/* Header */}
       <header className="bg-white shadow-md py-4 px-8 flex justify-between items-center z-20 relative">
         <h1 className="text-3xl font-extrabold text-red-600 tracking-tighter">
           รุ่งเรืองยานยนต์
@@ -30,10 +36,10 @@ export default async function Home() {
         </button>
       </header>
 
-      {/* Hero Banner (ส่วนสไลด์โชว์โปรโมชั่นที่เราสร้างใหม่) */}
+      {/* Hero Banner (สไลด์โชว์โปรโมชั่นที่ผ่านการกรองเวลาแล้ว) */}
       <PromoSlider promotions={promotions} />
 
-      {/* Motorcycle Catalog Section (ส่วนรายการรถมอเตอร์ไซค์ด้านล่าง) */}
+      {/* Motorcycle Catalog Section */}
       <section className="py-20 px-4 md:px-8 bg-gray-100 flex-1">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
