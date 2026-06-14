@@ -7,8 +7,8 @@ import Image from 'next/image';
 interface Promotion {
   id: string | number;
   title: string;
-  description?: string;
-  bannerUrl: string; // <--- เปลี่ยนคำนี้จาก imageUrl เป็น bannerUrl ครับ
+  description?: string | null;  // <--- เติม | null เข้าไปตรงนี้ครับ
+  bannerUrl: string;
 }
 
 export default function PromoSlider({ promotions }: { promotions: Promotion[] }) {
